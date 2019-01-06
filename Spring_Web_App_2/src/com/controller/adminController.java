@@ -57,7 +57,8 @@ public class adminController {
 	public String login_commit(HttpServletRequest req, Model mod,HttpSession session, @Valid Admin admin, BindingResult br){
 
 		try{
-
+			
+			logger.info("You are in /login controller");
 			String username = req.getParameter("username");
 			String password = req.getParameter("password");
 
@@ -130,8 +131,7 @@ public class adminController {
 
 		MultipartFile productImage = product.getProductImage();
 		String rootDirectory = request.getSession().getServletContext().getRealPath("/");
-//		path = Paths.get(rootDirectory+"\\WEB-INF\\resource\\images\\"+product.getId()+".png");
-		path = Paths.get("C:\\Users\\trevorp\\eclipse-workspace2\\Spring_Web_App_2\\WebContent\\WEB-INF\\resource\\"+product.getId()+".png");
+		path = Paths.get(rootDirectory+"\\WEB-INF\\resource\\images\\"+product.getId()+".png");
 		logger.info("Saving to path: "+path);
 
 		try {

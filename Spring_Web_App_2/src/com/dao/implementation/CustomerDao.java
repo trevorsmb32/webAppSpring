@@ -2,6 +2,9 @@ package com.dao.implementation;
 
 import java.util.List;
 
+import javax.persistence.Query;
+
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -10,6 +13,8 @@ import com.pojo.Customer;
 
 public class CustomerDao implements iCustomerDao{
 
+	private static final Logger logger = Logger.getLogger(CustomerDao.class);
+	
 	@Override
 	public void addCustomer(Customer customer) {
 		SessionFactory sf = HibernateUtil2.buildSessionFactory();
@@ -18,7 +23,7 @@ public class CustomerDao implements iCustomerDao{
 		session.save(customer);
 		session.getTransaction().commit();
 		sf.close();
-		
+
 	}
 
 	@Override
@@ -30,20 +35,23 @@ public class CustomerDao implements iCustomerDao{
 		session.update(customer);
 		session.getTransaction().commit();
 		sf.close();
-		
+
 	}
 
 	@Override
-	public Customer getCustomer(int id) {
+	public Customer getCustomer(String email) {
 		SessionFactory sf = HibernateUtil2.buildSessionFactory();
 		Session session = sf.openSession();
 		session.beginTransaction();
-		Customer customer = (Customer) session.get(Customer.class,id);
-		session.getTransaction().commit();
-		//sf.close();
-		
-		return customer;
-				
+		String sql = "FROM Customer C WHERE C.email = :email";
+		org.hibernate.Query query =  session.createQuery(sql);
+		query.setParameter("email", email);
+		logger.info("----------"
+				+ "Execute query: "+query);
+		logger.info("uniqueResult: "+query.uniqueResult());
+
+		return (Customer) query.uniqueResult();
+
 	}
 
 	@Override
@@ -51,9 +59,9 @@ public class CustomerDao implements iCustomerDao{
 		SessionFactory sf = HibernateUtil2.buildSessionFactory();
 		Session session = sf.openSession();
 		session.beginTransaction();
-		List<Customer> customers = session.createSQLQuery("From Customer").list();
+		List<Customer> customers = session.createSQLQuery("From Customer ").list();
 		session.getTransaction().commit();
-		
+
 		return customers;
 	}
 

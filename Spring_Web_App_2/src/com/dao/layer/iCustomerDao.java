@@ -8,7 +8,8 @@ public interface iCustomerDao {
 
 	void addCustomer(Customer customer);
 	void updateCustomer(int id);
-	Customer getCustomer(int id);
+	Customer getCustomer(String email);
 	List<Customer> listCustomers();
+
 
 }

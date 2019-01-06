@@ -27,7 +27,7 @@ public class myProfileController {
 
 	private static final Logger logger = Logger.getLogger(adminController.class);
 	
-	@RequestMapping(value="",method=RequestMethod.GET)
+	@RequestMapping(value="/",method=RequestMethod.GET)
 	public ModelAndView index(){
 		
 		ModelAndView mav = new ModelAndView("index");
@@ -67,6 +67,7 @@ public class myProfileController {
 			logger.info("binding result"+ br);
 			CustomerDao dao = new CustomerDao();
 			logger.info("Attempting to add customer");
+			customer.setRole("ROLE_USER");
 			dao.addCustomer(customer);
 						
 			
@@ -82,14 +83,14 @@ public class myProfileController {
     
     @RequestMapping(value = "/login_test", method = RequestMethod.GET)
     public String login(ModelMap model) {
-        return "login";
+        return "login_test";
     }
     
     @RequestMapping(value = "/login_test2", method = RequestMethod.GET)
 	protected ModelAndView handleRequestInternal(HttpServletRequest request,
 		HttpServletResponse response) throws Exception {
 
-		ModelAndView model = new ModelAndView("login");
+		ModelAndView model = new ModelAndView("login_test");
 		model.addObject("msg", "hello world");
 		
 		return model;

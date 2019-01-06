@@ -38,7 +38,6 @@
 						<td><input type="submit" value="Login" /></td>
 					</tr>
 
-					</div>
 
 				</table>
 			</form:form>

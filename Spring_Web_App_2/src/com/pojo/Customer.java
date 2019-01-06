@@ -10,13 +10,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+
 @Entity
 @Table(name="Customer")
-public class Customer {
+public class Customer  {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -31,27 +34,29 @@ public class Customer {
 	ShippingAddress shippingAddress;
 	
 	@OneToMany(mappedBy="customer", fetch=FetchType.LAZY,cascade=CascadeType.ALL)
-	List<Order> orders = new ArrayList();
+	List<Order> orders;
 	
+	@ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+	@JoinColumn(name = "role_id")
+	Roles role;
 
+	
 	
 	public Customer() {
 		super();
 	}
 
-
-
-	public Customer(String firstName, String secondName, String email, String password,
-			ShippingAddress shippingAddress ) {
+	public Customer(String firstName, String secondName, String email, String password,ShippingAddress shippingAddress,Roles role) {
 		super();
 		this.firstName = firstName;
 		this.secondName = secondName;
 		this.email = email;
 		this.password = password;
-		this.shippingAddress = shippingAddress;
-
+		this.shippingAddress =shippingAddress;
+		this.role=role;
 	}
-	
+
+
 
 
 	public int getId() {
@@ -94,4 +99,24 @@ public class Customer {
 	}
 
 
+	public List<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
+	}
+
+
+	public Roles getRole() {
+		return role;
+	}
+
+
+	public void setRole(Roles role) {
+		this.role = role;
+	}
+
+
+	
 }

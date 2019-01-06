@@ -49,7 +49,7 @@ public class TestDAO {
 	public void addCustomer() {
 
 		ShippingAddress SA = new ShippingAddress("Test_DAO","Test_DAO","Test_DAO","Test_DAO","Test_DAO");
-		Customer customer2 = new Customer("Test_DAO","Test_DAO","Test_DAO","Test_DAO",SA);
+		Customer customer2 = new Customer("Test_DAO","Test_DAO","Test_DAO","Test_DAO",SA, null);
 		
 		iCustomerDao dao = new CustomerDao();
 		ShippingAddressDAO sdao = new ShippingAddressDAO();
@@ -64,7 +64,7 @@ public class TestDAO {
 	public void testShoppingCart() {
 		
 		ShippingAddress SA = new ShippingAddress("Test_DAO","Test_DAO","Test_DAO","Test_DAO","Test_DAO");
-		Customer customer2 = new Customer("Test_DAO2","Test_DAO2","Test_DAO2","Test_DAO2",SA);
+		Customer customer2 = new Customer("Test_DAO2","Test_DAO2","Test_DAO2","Test_DAO2",SA, null);
 		
 		iCustomerDao dao = new CustomerDao();
 		dao.addCustomer(customer2);
