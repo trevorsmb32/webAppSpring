@@ -37,7 +37,6 @@
 					<a href="<spring:url value="/removeFromCart/${product.id}" />"><span
 						class="glyphicon glyphicon-info-sign"></span></a>
 					</td>
-
 				</tr>
 
 			</c:forEach>

@@ -20,6 +20,7 @@ public class userDAO implements iUserDAO {
 			session.beginTransaction();
 
 			List<Admin> admin = session.createQuery("From Admin where username='"+username+"' and password='"+password+"'").list();
+			System.out.println("From Admin where username='"+username+"' and password='"+password+"'");
 			System.out.println("Hibernate Login Success....do Hibernate Login");
 			
 			session.close();

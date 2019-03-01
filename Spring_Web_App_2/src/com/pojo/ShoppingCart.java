@@ -28,13 +28,13 @@ public class ShoppingCart {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	int id;
-	
+
 	@Column(name="total")
 	double total;
-	
+
 	@OneToMany(mappedBy="shoppingCart")
 	List<Item> items = new ArrayList<Item>();
-	
+
 	@OneToOne(fetch=FetchType.LAZY,targetEntity = Order.class)
 	@JoinColumn(name="order_id")
 	Order order;
@@ -70,21 +70,25 @@ public class ShoppingCart {
 		logger.info("Before Attempting to add Item: "+item.getName());
 		boolean isExist = false;
 		double totalNumber=0;
-		for (Item c : items) {
-			//if (c.getName()==item.getName()) {
-			if (c.equals(item)){
-				logger.info("Name of item is "+c.getName()+"\n the added item name is:" +item.getName());
-				c.setQuantity((int) (c.getQuantity() + 1));
+		for (Item c :this.items) {
+			logger.info("Adding item to cart: Looping through cart Item name"+c.getName());
+			if (c.getId()==item.getId()) {
+				logger.info("Adding item to cart: Names match"+c.getId()+"=="+item.getId());
+				//if (c.equals(item)){
+				logger.info("Adding item to cart: item names are the same incresing quatity +1 from");
+				int quantity = (int) (c.getQuantity()+1);
+				logger.info("Adding item to cart: quantity is"+quantity);
+				c.setQuantity(quantity);
 				logger.info("Increasing:"+item.getName()+" to"+c.getQuantity());
 				isExist = true;
 			}
-			totalNumber = totalNumber+c.getQuantity()*c.getPrice();
+			totalNumber = totalNumber+(c.getQuantity()*c.getPrice());
 			logger.info("Add to Looping: "+totalNumber);
 
 		}
 		if (isExist == false) {
 			logger.info("The Item: "+item.getName()+" does not exists adding item");
-			items.add(item);
+			this.items.add(item);
 			totalNumber = totalNumber+item.getQuantity()*item.getPrice();
 			logger.info("Item does not exist total: "+totalNumber);
 

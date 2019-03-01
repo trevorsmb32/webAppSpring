@@ -9,11 +9,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.apache.log4j.Logger;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,7 +42,6 @@ import com.pojo.Product;
 public class adminController {
 
 	private static final Logger logger = Logger.getLogger(adminController.class);
-
 	private Path path;
 
 	@RequestMapping(value="/login",method=RequestMethod.GET)
@@ -51,32 +54,43 @@ public class adminController {
 		return mav;
 	}
 
+	@RequestMapping(value="/logout",method=RequestMethod.GET)
+	public String logOutPage(HttpServletRequest request, HttpServletResponse response) {
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();	    
+		if (auth != null){    
+			new SecurityContextLogoutHandler().logout(request, response, auth);
+		}
+
+		return "redirect:/login";
+	}
+
 
 	//Used to submit user details
 	@RequestMapping(value="/login" , method=RequestMethod.POST)
 	public String login_commit(HttpServletRequest req, Model mod,HttpSession session, @Valid Admin admin, BindingResult br){
 
 		try{
-			
+
 			logger.info("You are in /login controller");
 			String username = req.getParameter("username");
 			String password = req.getParameter("password");
 
-			//System.out.println(br.getAllErrors());
-			//System.out.println("Login attempt");
-
+			logger.debug(br.getAllErrors());
 			userDAO authenticate = new userDAO();
 			String message = authenticate.doHibernateLogin(username, password);
-			//.equals is used to compare objects			
-			if (message.equals("login success")){
-				session.setAttribute("username", username);
-				return "redirect:admin";
-			}
-			else{
-				//Print Error Message
-				System.out.println("Login Failed");
-				//mod.addAttribute("error_msg",message);
-			}
+			//.equals is used to compare objects
+			logger.info("Admin controlller message :"+message);
+
+				if (message.equals("login success")){
+					session.setAttribute("username", username);
+					return "redirect:admin";
+				}
+				else{
+					//Print Error Message
+					System.out.println("Login Failed");
+					//mod.addAttribute("error_msg",message);
+				}
 
 			return "login";
 		}
@@ -127,7 +141,7 @@ public class adminController {
 		logger.debug("Binding Result Debug add Prodcut:"+br.getAllErrors());
 		ProductDAO productDAO = new ProductDAO();
 		productDAO.addProduct(product);
-	
+
 
 		MultipartFile productImage = product.getProductImage();
 		String rootDirectory = request.getSession().getServletContext().getRealPath("/");
@@ -188,7 +202,7 @@ public class adminController {
 		if(br.hasErrors()){
 			return "editProduct";
 		}
-		
+
 		logger.debug("Newly editing"+id);
 		ProductDAO ProductDAO = new ProductDAO();	
 		logger.debug("Editing Attempting"+id);

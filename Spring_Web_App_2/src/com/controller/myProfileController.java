@@ -20,6 +20,7 @@ import com.dao.implementation.CustomerDao;
 import com.doa.registery.RegisteryDAO;
 import com.pojo.Customer;
 import com.pojo.Product;
+import com.pojo.Roles;
 import com.pojo.ShippingAddress;
 
 @Controller
@@ -67,9 +68,10 @@ public class myProfileController {
 			logger.info("binding result"+ br);
 			CustomerDao dao = new CustomerDao();
 			logger.info("Attempting to add customer");
-			customer.setRole("ROLE_USER");
-			dao.addCustomer(customer);
-						
+			//Roles role = new Roles();
+			//role.setRoles("ROLE_USER");
+			//customer.setRole(role);
+			dao.addCustomer(customer);					
 			
 			return "redirect:/productList";
 			
